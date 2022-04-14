@@ -25,6 +25,12 @@ def apply_target(conf, target):
     return deep_merge(conf, target_conf)
 
 
+def clean_targets(conf, targets):
+    for target in targets:
+        del conf[TARGET_TOKEN + target]
+    return conf
+
+
 def get_first_roo_index(confs):
     for i, conf in enumerate(confs):
         if conf.get("root", False):
@@ -32,7 +38,14 @@ def get_first_roo_index(confs):
     return -1
 
 
-def get_confit(path, name="config", target=None, tree=True, root_dir=home_dir):
+def get_confit(
+    path,
+    name="config",
+    target=None,
+    tree=True,
+    root_dir=home_dir,
+    enforce_target=True,
+):
     name = "{}.yaml".format(name)
     files = [name, ".{}".format(name)]
     confs = [
@@ -43,16 +56,22 @@ def get_confit(path, name="config", target=None, tree=True, root_dir=home_dir):
 
     conf_targets = get_conf_targets(conf)
 
-    if target is not None:
-        if not conf_has_targets(conf):
-            raise Exception("You must define targets in file.")
+    if enforce_target:
+        if target is not None:
+            if not conf_has_targets(conf):
+                raise Exception("You must define targets in file.")
 
-        if target not in conf_targets:
-            raise Exception('Target "{}" not found'.format(target))
+            if target not in conf_targets:
+                raise Exception('Target "{}" not found'.format(target))
 
-        conf = apply_target(conf, target)
+            conf = apply_target(conf, target)
+        else:
+            if conf_has_targets(conf):
+                raise Exception("You must pass a target.")
     else:
-        if conf_has_targets(conf):
-            raise Exception("You must pass a target.")
+        if target is not None:
+            conf = apply_target(conf, target)
+        else:
+            clean_targets(conf, conf_targets)
 
     return conf
