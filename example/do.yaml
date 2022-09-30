@@ -1,5 +1,8 @@
 root: true
 base_domain: foo.com
+mongo:
+  foo: 3
+  foo_bar: "{{ mongo.foo }}"
 file_path: /foo/bar.txt
 file_name: "{{ file_path | basename }}"
 do_not_fail: "{{ do_not_fail }}"

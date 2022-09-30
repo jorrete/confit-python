@@ -2,7 +2,7 @@ import os
 from os import getenv
 
 import yaml
-from jinja2 import Environment
+from jinja2 import DebugUndefined, Environment
 
 from .dict import deep_merge
 from .files import get_files
@@ -19,7 +19,9 @@ def dirname(path):
     return os.path.dirname(path)
 
 
-env = Environment()
+env = Environment(
+    # undefined=DebugUndefined,
+)
 env.filters["basename"] = basename
 env.filters["dirname"] = dirname
 
@@ -90,6 +92,8 @@ def get_confit(
             conf = apply_target(conf, target)
         else:
             clean_targets(conf, conf_targets)
+
+    import rich
 
     render = env.from_string(yaml.dump(conf)).render(conf)
 
