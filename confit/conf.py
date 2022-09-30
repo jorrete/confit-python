@@ -1,10 +1,27 @@
+import os
 from os import getenv
+
+import yaml
+from jinja2 import Environment
 
 from .dict import deep_merge
 from .files import get_files
 from .yaml import read_yaml
 
 TARGET_TOKEN = "target#"
+
+
+def basename(path):
+    return os.path.basename(path)
+
+
+def dirname(path):
+    return os.path.dirname(path)
+
+
+env = Environment()
+env.filters["basename"] = basename
+env.filters["dirname"] = dirname
 
 home_dir = getenv("HOME")
 
@@ -74,4 +91,6 @@ def get_confit(
         else:
             clean_targets(conf, conf_targets)
 
-    return conf
+    render = env.from_string(yaml.dump(conf)).render(conf)
+
+    return yaml.safe_load(render)

@@ -9,6 +9,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "pyyaml",
+        "Jinja2",
     ],
     extras_require={
         "dev": [

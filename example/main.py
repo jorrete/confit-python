@@ -1,9 +1,11 @@
+import os
+
 from rich.pretty import pprint
 
 from confit.conf import get_confit
 
 confit = get_confit(
-    "/home/jorro/Development/python/confit/example",
+    os.getcwd(),
     name="do",
     target="live",
     enforce_target=False,
