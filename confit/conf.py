@@ -2,7 +2,7 @@ import json
 import os
 from os import getenv
 
-from jinja2 import ChainableUndefined, Environment
+from jinja2 import DebugUndefined, Environment
 
 from .dict import deep_merge
 from .files import get_files
@@ -20,7 +20,7 @@ def dirname(path):
 
 
 env = Environment(
-    undefined=ChainableUndefined,
+    undefined=DebugUndefined,
 )
 env.filters["basename"] = basename
 env.filters["dirname"] = dirname

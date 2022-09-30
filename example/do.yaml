@@ -16,13 +16,11 @@ target#test:
   vars:
     nginx: true
     service: true
-    # domain: django-metal.{{ vars['base_domain'] }}
-    # domain: django-metal.{{ vars.base_domain }}
     domain: django-metal.{{ vars.base_domain }}
-    # allowed_hosts:
-    #   - "{{ vars.domain }}"
-    #   - "www.{{ vars.domain }}"
-    # nginx_server_name: "{{ vars.allowed_hosts | join(' ') }}"
-    # nginx_certs: "~/.domains/{{ vars.base_domain }}"
+    allowed_hosts:
+      - "{{ vars.domain }}"
+      - "www.{{ vars.domain }}"
+    nginx_server_name: "{{ vars.allowed_hosts | join(' ') }}"
+    nginx_certs: "~/.domains/{{ vars.base_domain }}"
     ssl_certificate: "{{ certs_dir }}/cert.pem"
     ssl_certificate_key: "{{ certs_dir }}/key.pem"
