@@ -1,8 +1,8 @@
+import json
 import os
 from os import getenv
 
-import yaml
-from jinja2 import DebugUndefined, Environment
+from jinja2 import ChainableUndefined, Environment
 
 from .dict import deep_merge
 from .files import get_files
@@ -20,12 +20,29 @@ def dirname(path):
 
 
 env = Environment(
-    # undefined=DebugUndefined,
+    undefined=ChainableUndefined,
 )
 env.filters["basename"] = basename
 env.filters["dirname"] = dirname
 
 home_dir = getenv("HOME")
+
+
+def conf_to_string(conf):
+    return json.dumps(conf, sort_keys=True, indent=0)
+
+
+def render_conf(conf):
+    return json.loads(env.from_string(conf_to_string(conf)).render(conf))
+
+
+def deep_render(conf):
+    render = render_conf(conf)
+
+    if conf_to_string(conf) == conf_to_string(render):
+        return render
+
+    return deep_render(render)
 
 
 def get_conf_targets(conf):
@@ -93,8 +110,4 @@ def get_confit(
         else:
             clean_targets(conf, conf_targets)
 
-    import rich
-
-    render = env.from_string(yaml.dump(conf)).render(conf)
-
-    return yaml.safe_load(render)
+    return deep_render(conf)

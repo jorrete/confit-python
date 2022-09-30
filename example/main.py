@@ -7,7 +7,7 @@ from confit.conf import get_confit
 confit = get_confit(
     os.getcwd(),
     name="do",
-    target="live",
+    target="test",
     enforce_target=False,
 )
 

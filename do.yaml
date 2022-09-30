@@ -1,0 +1,22 @@
+target#dev:
+  vars:
+    postgresql_db_host: "192.168.122.171"
+    postgresql_db_port: 5432
+    postgresql_open: true
+    redis_host: "192.168.122.171"
+    redis_port: 6379
+    redis_open: true
+target#test:
+  vars:
+    base_domain: minipaas.rocky85
+    postgresql_db_host: "{{ postgresql_server_host }}"
+    postgresql_db_port: "{{ postgresql_server_port }}"
+    postgresql_open: true
+    redis_host: "{{ redis_server_host }}"
+    redis_port: "{{ redis_server_port }}"
+    redis_open: true
+targets:
+  test:
+    ansible_host: 192.168.122.171
+    ansible_python_interpreter: "/usr/bin/python3"
+    ansible_user: "root"
